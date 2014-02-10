@@ -1,13 +1,35 @@
-#main img{
-
+body{
+	margin: 0px;
 }
 
-/*#main a:hover{
-	margin: 10px;
-	border: 3px solid red;
-}*/
+#puzzle_game{
+	margin: 0px auto; 
+	padding: 0px;
+	width: 1500px;
+	padding: 50px;
+	background-color: green
+}
 
-/*#main li:hover ul, .navGroup li.over ul{
-	display: block;
+#main{
+	margin: 0px;
+	width: 1500px;
+	height: auto;
+}
+
+#puzzle{
 	background-color: #cdcdcd;
-}*/
+	margin-top: 0px;
+	float: left;
+}
+
+#control{
+	padding: 50px;
+	margin: 0px;
+	font-size: 36px;
+	/*width: 300px;*/
+	float: left;
+}
+#control input{
+	margin-top: 50px;
+	font-size: 25px;
+}
