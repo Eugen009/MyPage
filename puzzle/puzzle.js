@@ -1,17 +1,10 @@
-//这里有三种信息，一是九宫格本身，二是HTML的结构，三图像的信息
-//HTML的信息本身是不用变法的
-//默认第号8是空的
-var gCurImageInfo = [
-	0, 1, 2,
-	3, 4, 5,
-	6, 7, 8
-];
 
 var gPuzzleSize = 3;
 var gPuzzleBlockNum = gPuzzleSize * gPuzzleSize;
 var gPuzzleNode = null;//九宫格的HTML结构
-var gBlockSize = [ 400, 400 ];
+var gBlockSize = [ 200, 200 ];
 var gBorderSize = 3;
+var gImageOffset = [300, 300]
 var gPuzzleBlankId = gPuzzleBlockNum - 1;
 var gImageFile = "file:///E:/picture/art/ref/browser/39607774.jpg";
 
@@ -25,7 +18,6 @@ function ToStyleValue( value )
 
 function SetStyleBorder( node, width, type, color )
 {
-	// if ( node.style == null ) return;
 	var valueStr = "";
 	valueStr = "";
 	valueStr += gBorderSize;
@@ -52,7 +44,7 @@ function OnBlockOver( e )
 		if( blockNode.id == gPuzzleBlankId ) return;
 		if( overIndex != -1 && GetNearBlankIndex( blockNode ) != -1 )
 		{
-			SetStyleBorder( e.currentTarget, gBorderSize, "solid", "red" );
+			SetNodeStyle( e.currentTarget, true );
 		}
 	}
 }
@@ -62,7 +54,22 @@ function OnBlockOut( e )
 	if( e != null && e.currentTarget )
 	{
 		//这里就强制更新吧
-		SetStyleBorder( e.currentTarget, gBorderSize, "solid", "black" );
+		SetNodeStyle( e.currentTarget, false );
+	}
+}
+
+function SetNodeStyle( node, bSelected )
+{
+	if( node != null )
+	{
+		if( bSelected )
+		{
+			SetStyleBorder( node, gBorderSize, "solid", "red" );
+		}
+		else
+		{
+			SetStyleBorder( node, gBorderSize, "solid", "black" );
+		}
 	}
 }
 
@@ -87,8 +94,12 @@ function OnBlockClicked( e )
 	if( blockIndex != -1 )
 	{
 		var blockNode = gPuzzleNode[blockIndex];
-		// alert( blockNode.id );
+		SetNodeStyle( e.currentTarget, false );
 		MoveToBlank( gPuzzleNode[blockIndex] );
+		if( IsJigsawFinished() )
+		{
+			ShowAllJigsaw();
+		}
 	}
 }
 
@@ -101,6 +112,34 @@ function CreatePuzzleBlock( index, id, node )
 	return block;
 }
 
+function GetPosByIndex( index )
+{
+	var x = Math.floor(index % 3);// * gBlockSize[0];
+	var y = Math.floor(index / 3);// *  gBlockSize[1];
+	var pos = [x,y];
+	return pos;
+}
+
+function ShowJigsawBorder( divNode, flag, x, y )
+{
+	if( flag ){
+		if( x == null || y == null ) return;
+		SetStyleBorder( divNode, gBorderSize, "solid", "black" );
+		divNode.style.width = ToStyleValue(gBlockSize[0] - (gBorderSize* (x+1)*2));
+		divNode.style.height = ToStyleValue(gBlockSize[1] - (gBorderSize* (y+1)*2));
+		divNode.onmouseover = OnBlockOver;
+		divNode.onmouseout = OnBlockOut;
+		divNode.onclick = OnBlockClicked;
+	}else{
+		divNode.style.border = "none";
+		divNode.style.width = ToStyleValue( gBlockSize[0] );
+		divNode.style.height = ToStyleValue( gBlockSize[1] );
+		divNode.onclick = null;
+		divNode.onmouseover = null;
+		divNode.onmouseout = null;
+	}
+}
+
 function CreatePuzzle( parentNode, imageName )
 {
 	if( parentNode == null )
@@ -110,40 +149,23 @@ function CreatePuzzle( parentNode, imageName )
 	gPuzzleNode = new Array();
 	for( var i = 0; i < count; i ++ )
 	{
-		var x = Math.floor(i % 3);// * gBlockSize[0];
-		var y = Math.floor(i / 3);// *  gBlockSize[1];
+		var pos = GetPosByIndex( i );
 		var divNode = document.createElement("div");
-		if( x == 2 )
-		{
+		if( pos[0] == 2 ){
 			divNode.style.cssFloat = "none";
-		}
-		else
-		{
+		}else{
 			divNode.style.cssFloat = "left";
 		}
-		var valueStr = "";
-		valueStr += (gBlockSize[0] - gBorderSize);
-		valueStr += "px";
-		divNode.style.width = valueStr;
-		valueStr = "";
-		valueStr += (gBlockSize[1] - gBorderSize);
-		valueStr += "px";
-		divNode.style.height = valueStr;
 		divNode.style.margin = "0px 0px";
 		divNode.style.padding = "0px";
 		divNode.style.overflow = "hidden";
-		SetStyleBorder( divNode, gBorderSize, "solid", "black" );
-		// if( i != gPuzzleBlankId )
-		{
-			divNode.onmouseover = OnBlockOver;
-			divNode.onmouseout = OnBlockOut;
-			divNode.onclick = OnBlockClicked;
-		}
+
 		var imgNode = document.createElement("img");
 		imgNode.src = imageName;
-		imgNode.style.top = ToStyleValue( -y * gBlockSize[1] );
-		imgNode.style.left = ToStyleValue( -x * gBlockSize[0] );
+		imgNode.style.top = ToStyleValue( -pos[1] * gBlockSize[1] - gImageOffset[0] );
+		imgNode.style.left = ToStyleValue( -pos[0] * gBlockSize[0] - gImageOffset[1] );
 		imgNode.style.position = "relative";
+		ShowJigsawBorder( divNode, true, pos[0], pos[1] );
 		
 		var aNode = document.createElement( "a" );
 		aNode.href = "#";
@@ -198,9 +220,6 @@ function GetNearBlankIndex( block )
 		var curY = y + dir[dirIndex + 1];
 		if( !IsValidPosInPuzzle( curX, curY ) )
 			continue;
-		// if( curX < 0 || curX >= gPuzzleSize || 
-			// curY < 0 || curY >= gPuzzleSize )
-			// continue;
 		var curIndex = curY * gPuzzleSize + curX;
 		var tempBlock = gPuzzleNode[curIndex];
 		if( tempBlock && tempBlock.id == gPuzzleBlankId )
@@ -260,9 +279,7 @@ function MakeMessOfBlock()
 		if( !IsValidPosInPuzzle( nextX, nextY ) ) continue;
 		var nextIndex = nextX + nextY * gPuzzleSize;
 		if( nextIndex == preId ) continue;
-		// alert( "preId:" + preId + " nextIndex:" + nextIndex );
 		SwapBlockPos( gPuzzleNode[nextIndex], gPuzzleNode[preId] );
-		// MoveToBlank( gPuzzleNode[nextIndex] );
 		preId = nextIndex;
 		x = nextX;
 		y = nextY;
@@ -270,12 +287,58 @@ function MakeMessOfBlock()
 	}
 }
 
+function IsJigsawFinished()
+{
+	var i = 0;
+	for( ; i< gPuzzleBlockNum; i++ )
+	{
+		var block = gPuzzleNode[i];
+		if( i != block.id ) break;
+	}
+	return i == gPuzzleBlockNum;
+}
+
+function GetDivNodeByJigsaw( block )
+{
+	var node = block.node;
+	if( node && node.parentNode && node.parentNode.parentNode )
+		return node.parentNode.parentNode;
+	return null;
+}
+
+function ShowAllJigsaw()
+{
+	var blankNode = gPuzzleNode[gPuzzleBlankId];
+	if( blankNode.id != gPuzzleBlankId ) return;
+	SetNodeVisible( blankNode.node, true );
+	for( var i = 0; i < gPuzzleBlockNum; i ++ )
+	{
+		var block = gPuzzleNode[i];
+		var divNode = GetDivNodeByJigsaw( block );
+		if( divNode )
+		{
+			ShowJigsawBorder( divNode, false, null, null );
+		}
+	}
+}
+
 function StartGame()
 {
-	var tempNode = document.getElementById( "main" )
+	var tempNode = document.getElementById( "puzzle" );
+	tempNode.innerHTML = "";
 	CreatePuzzle( tempNode, gImageFile );
 	MakeMessOfBlock();
 }
 
-StartGame();
+function InitGame()
+{
+	var tempNode = document.getElementById("main");
+	tempNode.style.height = ToStyleValue( gPuzzleSize * gBlockSize[1] );
+	tempNode = document.getElementById( "puzzle" );
+	tempNode.style.width = ToStyleValue( gPuzzleSize * gBlockSize[0] );
+	tempNode.style.height = ToStyleValue( gPuzzleSize * gBlockSize[1] );
+	tempNode = document.getElementById( "start_btn" );
+	tempNode.onclick = StartGame;
+}
 
+InitGame();
