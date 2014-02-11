@@ -4,7 +4,7 @@ var gPuzzleBlockNum = gPuzzleSize * gPuzzleSize;
 var gPuzzleNode = null;//九宫格的HTML结构
 var gBlockSize = [ 200, 200 ];
 var gBorderSize = 3;
-var gImageOffset = [300, 300]
+var gImageOffset = [0, 0]
 var gPuzzleBlankId = gPuzzleBlockNum - 1;
 var gImageFile = "file:///E:/picture/art/ref/browser/39607774.jpg";
 
@@ -140,6 +140,20 @@ function ShowJigsawBorder( divNode, flag, x, y )
 	}
 }
 
+function OnImageLoadedFinish( e )
+{
+	if( !e || !e.currentTarget ) return;
+	var img = e.currentTarget;
+	if( img.width > img.height ) 
+	{
+		img.style.height = ToStyleValue( (gBlockSize[1] * gPuzzleSize) );
+	}
+	else 
+	{
+		img.style.width = ToStyleValue( (gBlockSize[0] * gPuzzleSize) );
+	}
+}
+
 function CreatePuzzle( parentNode, imageName )
 {
 	if( parentNode == null )
@@ -165,6 +179,8 @@ function CreatePuzzle( parentNode, imageName )
 		imgNode.style.top = ToStyleValue( -pos[1] * gBlockSize[1] - gImageOffset[0] );
 		imgNode.style.left = ToStyleValue( -pos[0] * gBlockSize[0] - gImageOffset[1] );
 		imgNode.style.position = "relative";
+		imgNode.onload = OnImageLoadedFinish;
+		imgNode.style.height = "600px";//eugen test
 		ShowJigsawBorder( divNode, true, pos[0], pos[1] );
 		
 		// var aNode = document.createElement( "a" );
@@ -267,8 +283,8 @@ function MakeMessOfBlock()
 	];
 	var count = gPuzzleBlockNum;
 	var curNum = 0;
-	var x = gPuzzleSize - 1;//Math.floor( curBlankId % gPuzzleSize );
-	var y = gPuzzleSize - 1;//Math.floor( curBlankId 
+	var x = gPuzzleSize - 1;
+	var y = gPuzzleSize - 1;
 	var preIds = new Array();
 	var nextPoses = [
 		-1,-1,-1,
