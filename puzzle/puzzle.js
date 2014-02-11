@@ -167,12 +167,12 @@ function CreatePuzzle( parentNode, imageName )
 		imgNode.style.position = "relative";
 		ShowJigsawBorder( divNode, true, pos[0], pos[1] );
 		
-		var aNode = document.createElement( "a" );
-		aNode.href = "#";
+		// var aNode = document.createElement( "a" );
+		// aNode.href = "#";
 		
 		//构成HTML的结构
-		aNode.appendChild( imgNode );
-		divNode.appendChild( aNode );
+		// aNode.appendChild( imgNode );
+		divNode.appendChild( imgNode );
 		parentNode.appendChild( divNode );
 		
 		//程序结构
@@ -187,7 +187,8 @@ function GetBlockIndexByParent( node )
 	for( var i = 0; i < gPuzzleBlockNum; i ++)
 	{
 		var block = gPuzzleNode[i];
-		if( block.node.parentNode.parentNode == node )
+		var parentNode = GetDivNodeByJigsaw( block );
+		if( parentNode == node )
 			return i;
 	}
 	return -1;
@@ -257,7 +258,7 @@ function MoveToBlank( block )
 
 function MakeMessOfBlock()
 {
-	var preId = gPuzzleBlockNum - 1;
+	//var preId = gPuzzleBlockNum - 1;
 	var dir = [ 
 		-1, 0,
 		0, -1, 
@@ -265,24 +266,53 @@ function MakeMessOfBlock()
 		0, 1
 	];
 	var count = gPuzzleBlockNum;
-	for( var i = 0; i < count; i ++ )
 	var curNum = 0;
 	var x = gPuzzleSize - 1;//Math.floor( curBlankId % gPuzzleSize );
 	var y = gPuzzleSize - 1;//Math.floor( curBlankId 
+	var preIds = new Array();
+	var nextPoses = [
+		-1,-1,-1,
+		-1,-1,-1,
+		-1,-1,-1,
+		-1,-1,-1
+	];
+	// alert( "nextPoses Length:" + nextPoses.length );
+	//算法为，从空白取邻坐的四点，去掉已经占用的，再随机抽一个，四周都无空时，结束
 	while( curNum < count )
 	{
+		var curNextSize = 0;
+		for( var k = 0; k < 8; k += 2 )
+		{
+			var nextX = x + dir[k];
+			var nextY = y + dir[k+1];
+			if( !IsValidPosInPuzzle( nextX, nextY ) )
+			{
+				continue;
+			}
+			var nextId = nextX + nextY * gPuzzleSize;
+			var j = 0;
+			for( j = 0; j < preIds.length && preIds[j]!= nextId; j ++){}
+			if( j == preIds.length )
+			{
+				var tempIndex = curNextSize * 3;
+				nextPoses[tempIndex] = nextId;
+				nextPoses[tempIndex+1] = nextX;
+				nextPoses[tempIndex+2] = nextY;
+				curNextSize ++;
+			}
+		}
+		if( curNextSize == 0 ) break;//已经在附近找不到移动的地方了		
+		//随机找一个
 		var num = Math.floor( Math.random() * 1000 );
-		num = num % 4;
-		num *= 2;
-		var nextX = x + dir[ num ];
-		var nextY = y + dir[ num + 1 ];
-		if( !IsValidPosInPuzzle( nextX, nextY ) ) continue;
-		var nextIndex = nextX + nextY * gPuzzleSize;
-		if( nextIndex == preId ) continue;
-		SwapBlockPos( gPuzzleNode[nextIndex], gPuzzleNode[preId] );
-		preId = nextIndex;
-		x = nextX;
-		y = nextY;
+		num = num % curNextSize;
+		num *= 3;
+		var preId = gPuzzleBlockNum - 1;
+		var nextId = nextPoses[num ];
+		if( preIds.length > 0 ) preId = preIds[preIds.length - 1];
+		SwapBlockPos( gPuzzleNode[nextId], gPuzzleNode[preId] );
+		preIds.push(nextId);
+		x = nextPoses[num +1];
+		y = nextPoses[num +2];
 		curNum ++;
 	}
 }
@@ -301,8 +331,8 @@ function IsJigsawFinished()
 function GetDivNodeByJigsaw( block )
 {
 	var node = block.node;
-	if( node && node.parentNode && node.parentNode.parentNode )
-		return node.parentNode.parentNode;
+	if( node && node.parentNode && node.parentNode )
+		return node.parentNode;
 	return null;
 }
 
