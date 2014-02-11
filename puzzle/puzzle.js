@@ -7,6 +7,8 @@ var gBorderSize = 3;
 var gImageOffset = [0, 0]
 var gPuzzleBlankId = gPuzzleBlockNum - 1;
 var gImageFile = "file:///E:/picture/art/ref/browser/39607774.jpg";
+var gCurrentTime = 0;
+var gStartGame = false;
 
 function ToStyleValue( value )
 {
@@ -99,6 +101,7 @@ function OnBlockClicked( e )
 		if( IsJigsawFinished() )
 		{
 			ShowAllJigsaw();
+			gStartGame = false;
 		}
 	}
 }
@@ -368,12 +371,36 @@ function ShowAllJigsaw()
 	}
 }
 
+function OnUpdateTimer()
+{
+	if( !gStartGame ) return;
+	gCurrentTime +=1;
+	var second = gCurrentTime % 60;
+	var min = Math.floor( gCurrentTime / 60 );
+	if( min > 99 ) min = 99;
+	var node = document.getElementById("timer");
+	if( node )
+	{
+		var minStr = "";
+		if( minStr / 10 < 1 ) minStr += "0";
+		minStr += min;
+		var secStr ="";
+		if( second /10 < 1) secStr += "0";
+		secStr += second;
+		node.innerHTML = minStr + ":" + secStr;
+	}
+	setTimeout( OnUpdateTimer, 1000 );
+}
+
 function StartGame()
 {
 	var tempNode = document.getElementById( "puzzle" );
 	tempNode.innerHTML = "";
 	CreatePuzzle( tempNode, gImageFile );
 	MakeMessOfBlock();
+	gStartGame = true;
+	gCurrentTime = 0;
+	setTimeout( OnUpdateTimer, 1000 );
 }
 
 function InitGame()
