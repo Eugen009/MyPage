@@ -3,12 +3,14 @@ var gPuzzleSize = 3;
 var gPuzzleBlockNum = gPuzzleSize * gPuzzleSize;
 var gPuzzleNode = null;//九宫格的HTML结构
 var gBlockSize = [ 200, 200 ];
-var gBorderSize = 3;
+var gBorderSize = 2;
 var gImageOffset = [0, 0]
 var gPuzzleBlankId = gPuzzleBlockNum - 1;
 var gImageFile = "file:///E:/picture/art/ref/browser/39607774.jpg";
 var gCurrentTime = 0;
 var gStartGame = false;
+var gGameTimer = null;
+var gGameStartTimeout = null;
 
 function ToStyleValue( value )
 {
@@ -100,8 +102,7 @@ function OnBlockClicked( e )
 		MoveToBlank( gPuzzleNode[blockIndex] );
 		if( IsJigsawFinished() )
 		{
-			ShowAllJigsaw();
-			gStartGame = false;
+			OnGameSuccess();
 		}
 	}
 }
@@ -128,8 +129,8 @@ function ShowJigsawBorder( divNode, flag, x, y )
 	if( flag ){
 		if( x == null || y == null ) return;
 		SetStyleBorder( divNode, gBorderSize, "solid", "black" );
-		divNode.style.width = ToStyleValue(gBlockSize[0] - (gBorderSize* (x+1)*2));
-		divNode.style.height = ToStyleValue(gBlockSize[1] - (gBorderSize* (y+1)*2));
+		divNode.style.width = ToStyleValue(gBlockSize[0] - (gBorderSize*2));
+		divNode.style.height = ToStyleValue(gBlockSize[1] - (gBorderSize*2));
 		divNode.onmouseover = OnBlockOver;
 		divNode.onmouseout = OnBlockOut;
 		divNode.onclick = OnBlockClicked;
@@ -143,17 +144,45 @@ function ShowJigsawBorder( divNode, flag, x, y )
 	}
 }
 
+function SetJigsawBorderVisible( flag )
+{
+	for( var y = 0; y < gPuzzleSize; y++ )
+	{
+		for( var x = 0; x < gPuzzleSize; x++ )
+		{
+			var index = x + y * gPuzzleSize;
+			ShowJigsawBorder( GetDivNodeByJigsaw( gPuzzleNode[index] ), flag, x, y );
+		}
+	}
+}
+
 function OnImageLoadedFinish( e )
 {
 	if( !e || !e.currentTarget ) return;
 	var img = e.currentTarget;
 	if( img.width > img.height ) 
 	{
-		img.style.height = ToStyleValue( (gBlockSize[1] * gPuzzleSize) );
+		var minSize = gBlockSize[1] * gPuzzleSize;
+		img.style.height = ToStyleValue( minSize );//(gBlockSize[1] * gPuzzleSize) );
+		//居中处理
+		var offset = img.height / minSize * img.width - minSize;
+		offset /= 2;
+		offset = Math.floor( offset );
+		var org = parseInt( img.style.left );
+		org -= offset;
+		img.style.left = ToStyleValue( org );
 	}
 	else 
 	{
-		img.style.width = ToStyleValue( (gBlockSize[0] * gPuzzleSize) );
+		var minSize = gBlockSize[0] * gPuzzleSize;
+		img.style.width = ToStyleValue( minSize );
+		//居中处理
+		var offset = img.width / minSize * img.height - minSize;
+		offset /= 2;
+		offset = Math.floor( offset );
+		var org = parseInt( img.style.top );
+		org -= offset;
+		img.style.top = ToStyleValue( org );
 	}
 }
 
@@ -184,13 +213,9 @@ function CreatePuzzle( parentNode, imageName )
 		imgNode.style.position = "relative";
 		imgNode.onload = OnImageLoadedFinish;
 		imgNode.style.height = "600px";//eugen test
-		ShowJigsawBorder( divNode, true, pos[0], pos[1] );
-		
-		// var aNode = document.createElement( "a" );
-		// aNode.href = "#";
+		ShowJigsawBorder( divNode, false, pos[0], pos[1] );
 		
 		//构成HTML的结构
-		// aNode.appendChild( imgNode );
 		divNode.appendChild( imgNode );
 		parentNode.appendChild( divNode );
 		
@@ -198,7 +223,6 @@ function CreatePuzzle( parentNode, imageName )
 		var puzzleBlock = CreatePuzzleBlock( i, i, imgNode );
 		gPuzzleNode.push( puzzleBlock );
 	}
-	SetNodeVisible( gPuzzleNode[count-1].node, false );
 }
 
 function GetBlockIndexByParent( node )
@@ -382,25 +406,81 @@ function OnUpdateTimer()
 	if( node )
 	{
 		var minStr = "";
-		if( minStr / 10 < 1 ) minStr += "0";
+		if( min / 10 < 1 ) minStr += "0";
 		minStr += min;
 		var secStr ="";
 		if( second /10 < 1) secStr += "0";
 		secStr += second;
 		node.innerHTML = minStr + ":" + secStr;
 	}
-	setTimeout( OnUpdateTimer, 1000 );
+	gGameTimer = setTimeout( OnUpdateTimer, 1000 );
+}
+
+function OnGameStartTimeout()
+{
+	gGameStartTimeout = null;
+	if( gPuzzleNode == null || !gStartGame
+		|| gPuzzleNode.length < gPuzzleBlockNum ) 
+		return;
+	//隐藏一块
+	SetNodeVisible( gPuzzleNode[gPuzzleBlankId].node, false );
+	//打乱顺序
+	MakeMessOfBlock();
+	//让按键产生作用
+	SetJigsawBorderVisible( true );
+	if( gGameTimer == null )
+	{
+		gGameTimer = setTimeout( OnUpdateTimer, 1000 );
+	}
 }
 
 function StartGame()
 {
-	var tempNode = document.getElementById( "puzzle" );
-	tempNode.innerHTML = "";
-	CreatePuzzle( tempNode, gImageFile );
-	MakeMessOfBlock();
-	gStartGame = true;
-	gCurrentTime = 0;
-	setTimeout( OnUpdateTimer, 1000 );
+	// gStartGame = false;
+	var nextBtnStr = "";
+	if( gStartGame ){
+		nextBtnStr = "START!";
+		if( gGameTimer != null )
+		{
+			clearTimeout( gGameTimer );
+			gGameTimer = null;
+		}
+		if( gGameStartTimeout != null )
+		{
+			clearTimeout( gGameStartTimeout );
+			gGameStartTimeout = null;
+		}
+	}else{			
+		gCurrentTime = 0;
+		var tempNode = document.getElementById( "puzzle" );
+		var timerNode = document.getElementById( "timer" );
+		timerNode.innerHTML = "00:00";
+		tempNode.innerHTML = "";
+		CreatePuzzle( tempNode, gImageFile );
+		nextBtnStr = "STOP!";
+		if( gGameStartTimeout == null )
+		{
+			gGameStartTimeout = setTimeout( OnGameStartTimeout, 5000 );
+		}
+	}
+	var startBtn = document.getElementById( "start_btn" );
+	startBtn.value = nextBtnStr;
+	gStartGame = !gStartGame;
+}
+
+function OnGameSuccess()
+{
+	gStartGame = false;
+	//stop timer
+	if( gGameTimer != null )
+	{
+		clearTimeout( gGameTimer );
+		gGameTimer = null;
+	}
+	// show all the image
+	ShowAllJigsaw();
+	var startBtn = document.getElementById( "start_btn" );
+	startBtn.value = "START!";
 }
 
 function InitGame()

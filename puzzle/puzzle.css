@@ -18,8 +18,10 @@ body{
 
 #puzzle{
 	background-color: #cdcdcd;
-	margin-top: 0px;
+	margin: 0px;
+	padding: 0px;
 	float: left;
+	border: 3px solid black;
 }
 
 #control{
