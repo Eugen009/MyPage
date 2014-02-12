@@ -492,6 +492,8 @@ function InitGame()
 	tempNode.style.height = ToStyleValue( gPuzzleSize * gBlockSize[1] );
 	tempNode = document.getElementById( "start_btn" );
 	tempNode.onclick = StartGame;
+	tempNode = document.getElementById( "puzzle_game" );
+	tempNode.style.width = ToStyleValue( gPuzzleSize * gBlockSize[0] + 200 );
 }
 
 InitGame();
