@@ -6,7 +6,7 @@ var gBlockSize = [ 200, 200 ];
 var gBorderSize = 2;
 var gImageOffset = [0, 0]
 var gPuzzleBlankId = gPuzzleBlockNum - 1;
-var gImageFile = "file:///E:/picture/art/ref/browser/39607774.jpg";
+var gImageFile = "http://www.clipstudio.net/view/img/en/howto/en_taira_akitsu.jpg";//"file:///E:/picture/art/ref/browser/39607774.jpg";
 var gCurrentTime = 0;
 var gStartGame = false;
 var gGameTimer = null;
@@ -163,9 +163,11 @@ function OnImageLoadedFinish( e )
 	if( img.width > img.height ) 
 	{
 		var minSize = gBlockSize[1] * gPuzzleSize;
+		var realWidth = minSize/img.height * img.width ; 
 		img.style.height = ToStyleValue( minSize );//(gBlockSize[1] * gPuzzleSize) );
+		img.style.width = ToStyleValue( realWidth );
 		//居中处理
-		var offset = img.height / minSize * img.width - minSize;
+		var offset = realWidth - minSize;
 		offset /= 2;
 		offset = Math.floor( offset );
 		var org = parseInt( img.style.left );
@@ -175,14 +177,18 @@ function OnImageLoadedFinish( e )
 	else 
 	{
 		var minSize = gBlockSize[0] * gPuzzleSize;
+		//alert("after set size:" + (img.height/img.width) );
+		var realHeight = img.height/img.width * minSize;
 		img.style.width = ToStyleValue( minSize );
+		img.style.height = ToStyleValue( realHeight );
 		//居中处理
-		var offset = img.width / minSize * img.height - minSize;
+		var offset = realHeight - minSize;
 		offset /= 2;
 		offset = Math.floor( offset );
 		var org = parseInt( img.style.top );
 		org -= offset;
 		img.style.top = ToStyleValue( org );
+		
 	}
 }
 
