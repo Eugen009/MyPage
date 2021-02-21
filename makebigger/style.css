@@ -1,0 +1,132 @@
+
+body {
+    overflow: hidden;
+    background-color: #000000;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+}
+#score {
+    background-color:none;
+    width: 150px;
+    height: 50px;
+    float: right;
+    padding-top: 20px;
+    font-size:40px;
+    color:rgb(90, 5, 5)
+}
+#canvas {
+    width: 600px;
+    height: 800px;
+    float: center;
+    margin: 0 auto;
+    background-color: #ffffff;
+}
+
+#start {
+    width: 300px;
+    height: 400px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -150px;
+    margin-left: -200px;
+    padding: 20px 30px;
+    background-color: #666666;
+    display:none;
+}
+
+#result {
+    width: 300px;
+    height: 200px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -100px;
+    margin-left: -150px;
+    background-color: #666666;
+    display:none;
+}
+
+.result_title{
+    padding-top:10px;
+    padding-left:20px;
+    padding-bottom:10px;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+#result_lst{
+    text-align: center;
+    font-size:20px;
+    color: rgb(35, 5, 90);
+    font-weight: bold;
+}
+
+.ok_btn {
+    float:left;
+    width: 80px;
+    height: 30px;
+    text-align: center;
+    background-color: #ffffff;
+    margin: 20px 20px;	
+    opacity: 1;
+}
+
+.ok_btn:hover{
+    background-color: #e7e549;
+}
+
+
+.box {
+    color:#ffffff;
+    display: flex; /* 新版，声明弹性盒子 */
+    flex-direction: column; /* 新版，垂直反向，结合了旧版的-webkit-box-orient和-webkit-box-direction */
+    flex-wrap: nowrap; /* 新版，父元素主轴尺寸不够的时候子元素换行，旧版没有找到对应的属性 */
+    justify-content: space-between; /* 新版，主轴的对其方式，两端靠齐，与旧版-webkit-box-pack对应 */
+    align-items: center; /* 新版，交叉轴的对其方式，收缩居中，与旧版-webkit-box-align对应 */
+    margin:0px;
+    padding:0px;
+    border:0px;
+}
+
+img{
+    margin:0px;
+    padding:0px;
+    border:0px;
+    vertical-align: bottom;
+}
+
+.top,.middle,.bottom {
+    width: 100%;
+    display: flex; /* 新版，声明弹性盒子 */
+    flex-direction: row; /* 新版，垂直反向，结合了旧版的-webkit-box-orient和-webkit-box-direction */
+    flex-wrap: nowrap; /* 新版，父元素主轴尺寸不够的时候子元素换行，旧版没有找到对应的属性 */
+    justify-content: space-between; /* 新版，主轴的对其方式，两端靠齐，与旧版-webkit-box-pack对应 */
+    align-items: center; /* 新版，交叉轴的对其方式，收缩居中，与旧版-webkit-box-align对应 */
+}
+.top,.middle,.bottom,.left,.center,.right {
+    -webkit-box-flex: 0;
+    flex-basis: auto;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex: 0 0 auto;
+
+    margin:0px;
+    padding:0px;
+    border:0px;
+}
+.top,.left {
+    -webkit-box-ordinal-group: 1;
+    order: 1;
+}
+.middle,.center {
+    -webkit-box-ordinal-group: 2;
+    order: 2;
+}
+.bottom,.right {
+    -webkit-box-ordinal-group: 3;
+    order: 3;
+}
