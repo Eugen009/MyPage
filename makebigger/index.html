@@ -5,90 +5,31 @@
 		<meta http-equiv="X-UA-Compatible" content="chrome=1">
 		<meta http-equiv="Content-Type" content="text/html; charset = UTF-8" />
 		<title>合合大大</title>
-		<style>
-			body {
-				overflow: hidden;
-				background-color: #000000;
-				user-select: none;
-				-webkit-user-select: none;
-				-moz-user-select: none;
-				-o-user-select: none;
-				-ms-user-select: none;
-			}
-			#score {
-				background-color:none;
-				width: 150px;
-				height: 50px;
-				float: right;
-				padding-top: 20px;
-				font-size:40px;
-				color:rgb(90, 5, 5)
-			}
-			#canvas {
-				width: 600px;
-				height: 800px;
-				float: center;
-				margin: 0 auto;
-				background-color: #ffffff;
-			}
-
-			#start {
-				width: 300px;
-				height: 400px;
-				position: absolute;
-				left: 50%;
-				top: 50%;
-				margin-top: -150px;
-				margin-left: -200px;
-				padding: 20px 30px;
-				background-color: #666666;
-				display:none;
-			}
-
-			#result {
-				width: 300px;
-				height: 200px;
-				position: absolute;
-				left: 50%;
-				top: 50%;
-				margin-top: -100px;
-				margin-left: -150px;
-				background-color: #666666;
-				display:none;
-			}
-
-			.result_title{
-				padding-top:10px;
-				padding-left:20px;
-				padding-bottom:10px;
-				font-weight: bold;
-				font-size: 40px;
-			}
-
-			#result_lst{
-				text-align: center;
-				font-size:20px;
-				color: rgb(35, 5, 90);
-				font-weight: bold;
-			}
-
-			.ok_btn {
-				float:left;
-				width: 80px;
-				height: 30px;
-				text-align: center;
-				background-color: #ffffff;
-				margin: 20px 20px;	
-				opacity: 1;
-			}
-
-			.ok_btn:hover{
-				background-color: #e7e549;
-			}
-		</style>
+		<link type="text/css" rel="styleSheet"  href="style.css" />
+		
 	</head> 
 	<body>
-	
+
+	<div class="flexBox">
+		<!--top-->
+		<div class="flexTop">
+			<div class="flexTop flexLeft"></div>
+			<div class="flexTop flexCenter"></div>
+			<div class="flexTop flexRight"></div>
+		</div>
+		<div class="flexMiddle">
+			<div class="flexMiddle flexLeft"></div>
+			<div class="flexMiddle flexCenter"></div>
+			<div class="flexMiddle flexRight"></div>
+		</div>
+		<div class="flexBottom">
+			<div class="flexBottom flexLeft"></div>
+			<div class="flexBottom flexCenter"></div>
+			<div class="flexBottom flexRight"></div>
+		</div>
+	</div>
+
+
 	<div id="canvas">
 		<div id="score"> 大：0</div>
 	</div>
