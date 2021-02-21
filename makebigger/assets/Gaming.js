@@ -1,15 +1,5 @@
 
 
-var themes = [ [ "#10222B", "#95AB63", "#BDD684", "#E2F0D6", "#F6FFE0" ],
-[ "#362C2A", "#732420", "#BF734C", "#FAD9A0", "#736859" ],
-[ "#0D1114", "#102C2E", "#695F4C", "#EBBC5E", "#FFFBB8" ],
-[ "#2E2F38", "#FFD63E", "#FFB54B", "#E88638", "#8A221C" ],
-[ "#121212", "#E6F2DA", "#C9F24B", "#4D7B85", "#23383D" ],
-[ "#343F40", "#736751", "#F2D7B6", "#BFAC95", "#8C3F3F" ],
-[ "#000000", "#2D2B2A", "#561812", "#B81111", "#FFFFFF" ],
-[ "#333B3A", "#B4BD51", "#543B38", "#61594D", "#B8925A" ] ];
-var theme;
-
 class GamingState extends GameState{
 	constructor(){
 		super(GAME_STATE.GAMING);
@@ -19,7 +9,7 @@ class GamingState extends GameState{
 	onEnter(stateData){
 		super.onEnter(stateData);
 		this.m_Canvas = document.getElementById( 'canvas' );
-		this.m_ScoreEle = document.getElementById("score");
+		this.m_ScoreEle = document.getElementById("current_score");
 		initScene(this.m_Canvas);
 		this.reset();
 	}
@@ -30,7 +20,7 @@ class GamingState extends GameState{
 		updateBall(this.m_Canvas);
 		if(this.m_CurScore != getBigBallCount()){
 			this.m_CurScore = getBigBallCount();
-			this.m_ScoreEle.innerHTML = "大："+ this.m_CurScore.toString();
+			this.m_ScoreEle.innerText = this.m_CurScore.toString();
 		}
 	}
 	onLeave(){
@@ -61,9 +51,6 @@ class GamingState extends GameState{
 	}
 	reset() {
 		removeAllBall();
-		// color theme
-		theme = themes[ Math.random() * themes.length >> 0 ];
-		document.body.style[ 'backgroundColor' ] = theme[ 0 ];
 	}	
 
 }

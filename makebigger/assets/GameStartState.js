@@ -11,11 +11,11 @@ class GameStartState extends GameState{
 		this.setStartDlgShow(false)
 	}
 	setStartDlgShow(flag){
-		var result_node = document.getElementById("start")
+		var result_node = document.getElementById("start_show")
 		if(flag)
-			result_node.style.cssText = "display:block"
+			result_node.style.visibility = "visible"
 		else
-			result_node.style.cssText = "display:none"
+			result_node.style.visibility = "hidden"
 	}
 }
 

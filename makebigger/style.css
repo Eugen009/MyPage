@@ -1,12 +1,14 @@
 
 body {
-    overflow: hidden;
     background-color: #ffffff;
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     -o-user-select: none;
     -ms-user-select: none;
+    display:flex;
+    flex-direction:row;
+    justify-content:center;
 }
 #score {
     background-color:none;
@@ -16,8 +18,12 @@ body {
     padding-top: 20px;
     font-size:40px;
     color:rgb(90, 5, 5);
-    display: none;
 }
+
+#score img{
+    float:left;
+}
+
 #canvas {
     width: 600px;
     height: 800px;
@@ -27,28 +33,34 @@ body {
 }
 
 #start {
-    width: 300px;
-    height: 400px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin-top: -150px;
-    margin-left: -200px;
+    width: 250px;
+    height: 300px;
     padding: 20px 30px;
-    background-color: #666666;
-    display:none;
+    background-color: #ffffff;
 }
 
 #result {
     width: 300px;
     height: 200px;
+    background-color: #ffffff;
+}
+
+#start_show{
     position: absolute;
     left: 50%;
     top: 50%;
-    margin-top: -100px;
-    margin-left: -150px;
-    background-color: #666666;
-    display:none;
+    margin-top: -300px;
+    margin-left: -200px;
+    visibility: hidden;
+}
+
+#result_show{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -300px;
+    margin-left: -200px;
+    visibility: hidden;
 }
 
 .result_title{
@@ -68,10 +80,11 @@ body {
 
 .ok_btn {
     float:left;
-    width: 80px;
-    height: 30px;
+    width: 87px;
+    height: 39px;
     text-align: center;
     background-color: #ffffff;
+    background-image:url(assets/images/btn_up.png);
     margin: 20px 20px;	
     opacity: 1;
 }
@@ -80,10 +93,18 @@ body {
     background-color: #e7e549;
 }
 
+.ok_btn:active{
+    background-image:url(assets/images/btn_down.png);
+}
+
+.ball {
+    border-radius: 50%;
+
+}
+
 .flexBox{
     flex-direction: column;
-    width: 300px;
-    height: 500px;
+
     display: -webkit-flex;
     display: flex;
 }
@@ -170,94 +191,4 @@ body {
     background-image: url(assets/images/right_bottom.png);
 }
 
-
-.StartBox{
-    flex-direction: column;
-    width: 300px;
-    height: 500px;
-    display: -webkit-flex;
-    display: flex;
-}
-
-.StartTop{
-    flex-direction: row;
-    justify-content:space-between;
-    flex-wrap: nowrap;
-    display: -webkit-flex;
-    display: flex;
-    width: 300px;
-}
-
-.flexMiddle{
-    flex-direction: row;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    justify-content:space-between;
-    flex-wrap: nowrap;
-    display: -webkit-flex;
-    display: flex;
-    width: 300px;
-    flex-grow: 1;
-    align-items: stretch;
-}
-
-.flexBottom{
-    width: 300px;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    justify-content:space-between;
-    flex-wrap: nowrap;
-    display: -webkit-flex;
-    display: flex;
-    align-self: flex-end;
-}
-
-.flexTop.flexLeft{
-    width: 40px;
-    height: 40px;
-    background-image: url(assets/images/left_top.png);
-}
-.flexTop.flexCenter{
-    height: 40px;
-    flex-grow: 1;
-    background-image: url(assets/images/top.png);
-}
-.flexTop.flexRight{
-    width: 40px;
-    height: 40px;
-    background-image: url(assets/images/right_top.png);
-}
-
-.flexMiddle.flexLeft{
-    width: 40px;
-    background-image: url(assets/images/left.png);
-}
-.flexMiddle.flexCenter{
-    flex-grow: 1;
-    background-image: none;
-    background-color: #666666;
-}
-.flexMiddle.flexRight{
-    width: 40px;
-    background-image: url(assets/images/right.png);
-}
-
-.flexBottom.flexLeft{
-    width: 40px;
-    height: 40px;
-    background-image: url(assets/images/left_bottom.png);
-}
-.flexBottom.flexCenter{
-    flex-grow: 1;
-    height: 40px;
-    background-image: url(assets/images/bottom.png);
-    background-color: #666666;
-}
-.flexBottom.flexRight{
-    width: 40px;
-    height: 40px;
-    align-self: flex-end;
-    background-image: url(assets/images/right_bottom.png);
-}
 

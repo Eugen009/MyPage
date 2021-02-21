@@ -26,7 +26,7 @@ var bigBallCount = 0
 
 function beginCreateBall(canvas){
     if(curBallElement==null&&isDropBallEnd()){
-        curBallY = 50;
+        curBallY = stage[1] + 50;
         curBallType = ((Math.random() * 10)>>0) %(BALL_TYPES.length -1)
         curBallSize = TYPE_2_RADIUS[curBallType] + 20;
         curBallX = window.innerWidth / 2 - curBallSize / 2;
@@ -45,9 +45,11 @@ function endCreateBall(){
 }
 
 function createBallEle(x, y, type, size, canvas){
-	var element = document.createElement("canvas");
+	var element = document.createElement("img");//"canvas");
+	element.src = "assets/images/ball.png"
 	element.width = size;
 	element.height = size;
+	element.style.borderRadius = "50%";
 	element.style.position = 'absolute';
 	element.style.left = x + 'px';
 	element.style.top = y + 'px';
@@ -57,19 +59,19 @@ function createBallEle(x, y, type, size, canvas){
 	element.style.msTransform = 'translateZ(0)';
 	element.style.transform = 'translateZ(0)';
 
-	var graphics = element.getContext("2d");
+	// var graphics = element.getContext("2d");
 
-	graphics.fillStyle = TYPE_2_COLOR[type];
-	graphics.beginPath();
-	graphics.arc(size * .5, size * .5, size * .5, 0, PI2, true); 
-	graphics.closePath();
-	graphics.fill();
+	// graphics.fillStyle = TYPE_2_COLOR[type];
+	// graphics.beginPath();
+	// graphics.arc(size * .5, size * .5, size * .5, 0, PI2, true); 
+	// graphics.closePath();
+	// graphics.fill();
 
-	graphics.fillStyle = '#000000';
-	graphics.beginPath();
-	graphics.arc(size * .5, size * .5, size * .5, 0, PI2, true); 
-	graphics.closePath();
-	graphics.stroke();
+	// graphics.fillStyle = '#000000';
+	// graphics.beginPath();
+	// graphics.arc(size * .5, size * .5, size * .5, 0, PI2, true); 
+	// graphics.closePath();
+	// graphics.stroke();
 
 	canvas.appendChild(element);
 	return element;
