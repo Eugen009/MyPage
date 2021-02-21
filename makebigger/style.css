@@ -1,7 +1,7 @@
 
 body {
     overflow: hidden;
-    background-color: #000000;
+    background-color: #ffffff;
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -15,7 +15,8 @@ body {
     float: right;
     padding-top: 20px;
     font-size:40px;
-    color:rgb(90, 5, 5)
+    color:rgb(90, 5, 5);
+    display: none;
 }
 #canvas {
     width: 600px;
@@ -79,54 +80,184 @@ body {
     background-color: #e7e549;
 }
 
-
-.box {
-    color:#ffffff;
-    display: flex; /* 新版，声明弹性盒子 */
-    flex-direction: column; /* 新版，垂直反向，结合了旧版的-webkit-box-orient和-webkit-box-direction */
-    flex-wrap: nowrap; /* 新版，父元素主轴尺寸不够的时候子元素换行，旧版没有找到对应的属性 */
-    justify-content: space-between; /* 新版，主轴的对其方式，两端靠齐，与旧版-webkit-box-pack对应 */
-    align-items: center; /* 新版，交叉轴的对其方式，收缩居中，与旧版-webkit-box-align对应 */
-    margin:0px;
-    padding:0px;
-    border:0px;
+.flexBox{
+    flex-direction: column;
+    width: 300px;
+    height: 500px;
+    display: -webkit-flex;
+    display: flex;
 }
 
-img{
-    margin:0px;
-    padding:0px;
-    border:0px;
-    vertical-align: bottom;
+.flexTop{
+    flex-direction: row;
+    justify-content:space-between;
+    flex-wrap: nowrap;
+    display: -webkit-flex;
+    display: flex;
+    width: 300px;
 }
 
-.top,.middle,.bottom {
-    width: 100%;
-    display: flex; /* 新版，声明弹性盒子 */
-    flex-direction: row; /* 新版，垂直反向，结合了旧版的-webkit-box-orient和-webkit-box-direction */
-    flex-wrap: nowrap; /* 新版，父元素主轴尺寸不够的时候子元素换行，旧版没有找到对应的属性 */
-    justify-content: space-between; /* 新版，主轴的对其方式，两端靠齐，与旧版-webkit-box-pack对应 */
-    align-items: center; /* 新版，交叉轴的对其方式，收缩居中，与旧版-webkit-box-align对应 */
+.flexMiddle{
+    flex-direction: row;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content:space-between;
+    flex-wrap: nowrap;
+    display: -webkit-flex;
+    display: flex;
+    width: 300px;
+    flex-grow: 1;
+    align-items: stretch;
 }
-.top,.middle,.bottom,.left,.center,.right {
-    -webkit-box-flex: 0;
-    flex-basis: auto;
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex: 0 0 auto;
 
-    margin:0px;
-    padding:0px;
-    border:0px;
+.flexBottom{
+    width: 300px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content:space-between;
+    flex-wrap: nowrap;
+    display: -webkit-flex;
+    display: flex;
+    align-self: flex-end;
 }
-.top,.left {
-    -webkit-box-ordinal-group: 1;
-    order: 1;
+
+.flexTop.flexLeft{
+    width: 40px;
+    height: 40px;
+    background-image: url(assets/images/left_top.png);
 }
-.middle,.center {
-    -webkit-box-ordinal-group: 2;
-    order: 2;
+.flexTop.flexCenter{
+    height: 40px;
+    flex-grow: 1;
+    background-image: url(assets/images/top.png);
 }
-.bottom,.right {
-    -webkit-box-ordinal-group: 3;
-    order: 3;
+.flexTop.flexRight{
+    width: 40px;
+    height: 40px;
+    background-image: url(assets/images/right_top.png);
 }
+
+.flexMiddle.flexLeft{
+    width: 40px;
+    background-image: url(assets/images/left.png);
+}
+.flexMiddle.flexCenter{
+    flex-grow: 1;
+    background-image: none;
+    background-color: #666666;
+}
+.flexMiddle.flexRight{
+    width: 40px;
+    background-image: url(assets/images/right.png);
+}
+
+.flexBottom.flexLeft{
+    width: 40px;
+    height: 40px;
+    background-image: url(assets/images/left_bottom.png);
+}
+.flexBottom.flexCenter{
+    flex-grow: 1;
+    height: 40px;
+    background-image: url(assets/images/bottom.png);
+    background-color: #666666;
+}
+.flexBottom.flexRight{
+    width: 40px;
+    height: 40px;
+    align-self: flex-end;
+    background-image: url(assets/images/right_bottom.png);
+}
+
+
+.StartBox{
+    flex-direction: column;
+    width: 300px;
+    height: 500px;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.StartTop{
+    flex-direction: row;
+    justify-content:space-between;
+    flex-wrap: nowrap;
+    display: -webkit-flex;
+    display: flex;
+    width: 300px;
+}
+
+.flexMiddle{
+    flex-direction: row;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content:space-between;
+    flex-wrap: nowrap;
+    display: -webkit-flex;
+    display: flex;
+    width: 300px;
+    flex-grow: 1;
+    align-items: stretch;
+}
+
+.flexBottom{
+    width: 300px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content:space-between;
+    flex-wrap: nowrap;
+    display: -webkit-flex;
+    display: flex;
+    align-self: flex-end;
+}
+
+.flexTop.flexLeft{
+    width: 40px;
+    height: 40px;
+    background-image: url(assets/images/left_top.png);
+}
+.flexTop.flexCenter{
+    height: 40px;
+    flex-grow: 1;
+    background-image: url(assets/images/top.png);
+}
+.flexTop.flexRight{
+    width: 40px;
+    height: 40px;
+    background-image: url(assets/images/right_top.png);
+}
+
+.flexMiddle.flexLeft{
+    width: 40px;
+    background-image: url(assets/images/left.png);
+}
+.flexMiddle.flexCenter{
+    flex-grow: 1;
+    background-image: none;
+    background-color: #666666;
+}
+.flexMiddle.flexRight{
+    width: 40px;
+    background-image: url(assets/images/right.png);
+}
+
+.flexBottom.flexLeft{
+    width: 40px;
+    height: 40px;
+    background-image: url(assets/images/left_bottom.png);
+}
+.flexBottom.flexCenter{
+    flex-grow: 1;
+    height: 40px;
+    background-image: url(assets/images/bottom.png);
+    background-color: #666666;
+}
+.flexBottom.flexRight{
+    width: 40px;
+    height: 40px;
+    align-self: flex-end;
+    background-image: url(assets/images/right_bottom.png);
+}
+
