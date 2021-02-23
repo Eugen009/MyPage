@@ -12,6 +12,7 @@ class GamingState extends GameState{
 		this.m_ScoreEle = document.getElementById("current_score");
 		initScene(this.m_Canvas);
 		this.reset();
+		createHidShow(-100, -100, this.m_Canvas);
 	}
 	onUpdate(){
 		if( getTheTopestOfBall() < stage[1] )

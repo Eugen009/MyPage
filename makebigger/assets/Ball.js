@@ -24,6 +24,8 @@ var curBallBody = null;
 
 var bigBallCount = 0
 
+var hitElement = null;
+
 function beginCreateBall(canvas){
     if(curBallElement==null&&isDropBallEnd()){
         curBallY = stage[1] + 50;
@@ -58,20 +60,6 @@ function createBallEle(x, y, type, size, canvas){
 	element.style.OTransform = 'translateZ(0)';
 	element.style.msTransform = 'translateZ(0)';
 	element.style.transform = 'translateZ(0)';
-
-	// var graphics = element.getContext("2d");
-
-	// graphics.fillStyle = TYPE_2_COLOR[type];
-	// graphics.beginPath();
-	// graphics.arc(size * .5, size * .5, size * .5, 0, PI2, true); 
-	// graphics.closePath();
-	// graphics.fill();
-
-	// graphics.fillStyle = '#000000';
-	// graphics.beginPath();
-	// graphics.arc(size * .5, size * .5, size * .5, 0, PI2, true); 
-	// graphics.closePath();
-	// graphics.stroke();
 
 	canvas.appendChild(element);
 	return element;
@@ -125,6 +113,32 @@ function isDropBallHit(body){
 
 function isDropBallEnd(){
     return curBallBody == null;
+}
+
+function createHidShow(x, y, canvas){
+	console.log("Do create hit show!!!")
+	var element = document.createElement("img");//"canvas");
+	element.src = "assets/images/m.png"
+	var w = 20;
+	var h = 20;
+	element.style.width = w.toString() + "px";
+	element.style.height = h.toString() + "px";
+	element.style.position = 'absolute';
+	element.style.left = (x-w/2) + 'px';
+	element.style.top = (y-h/2) + 'px';
+	element.style.backgroundImage = "url(\"assets/images/m.jpg\")";
+	element.style.rotate = (Math.random() * 100) >> 0 + "deg";
+	element.style.zIndex = 1000;
+	canvas.appendChild(element);
+	var curTimer = setInterval(function(){
+		element.style.transform = "scale(2, 2)";
+		element.style.transition = "1.0s";
+		clearTimeout(curTimer);
+		curTimer = setInterval(function(){
+			canvas.removeChild(element)
+			clearTimeout(curTimer);
+		}, 2000);
+	}, 10)
 }
 
 function checkBallContact(canvas){
@@ -190,7 +204,8 @@ function checkBallContact(canvas){
 		if(curType == TYPE_MAX){
             bigBallCount ++;
         }
-        center.Multiply(1/contactCount);
+		center.Multiply(1/contactCount);
+		createHidShow(center.x, center.y, canvas)
 		createBallInBox(center.x, center.y, curType, canvas)
 	}
 }

@@ -151,3 +151,32 @@ function CreateBackShow(node, imgName, imgWidth, imgHeight, imgType){
 
 }
 
+function PlayScaleAnim(node, fromScale, toScale, totalTime, repeat){
+  if(node==null)
+    return;
+  node.style.visibility = "visible";
+  totalTime *= 1000;
+  var frame = 30;
+  var interval = 1000/ frame;
+  var scaleStep = (toScale - fromScale) / totalTime * frame;
+  var curScale = fromScale;
+  var curTime = totalTime;
+  var timer = setInterval(function(){
+    var ss = curScale.toString()
+    node.style.transform = "scale(" +ss + ", " + ss+");"
+    console.log("cur scale:%s", ss)
+    curScale += scaleStep;
+    if(curScale< 0)
+      curScale = 0;
+    curTime -= frame;
+    if(curTime <= 0){
+      if(repeat){
+        curScale = fromScale;
+        curTime = totalTime;
+      }else{
+        clearTimeout(timer)
+      }
+    }
+  }, interval)
+
+}
